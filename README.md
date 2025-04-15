@@ -11,8 +11,11 @@ Automatically transfers media files from a source channel to a target channel, u
 - Fully automated (no user input required)
 - Handles rate limits automatically
 - Shows progress and statistics
+- Downloads from oldest to newest messages
 
 ## Deployment on Koyeb
+
+### Method 1: Using GitHub
 
 1. Fork this repository to your GitHub account
 
@@ -35,6 +38,32 @@ Automatically transfers media files from a source channel to a target channel, u
    - Set the port to 80
    - Click "Deploy"
 
+### Method 2: Using Docker Image
+
+1. Build the Docker image locally:
+   ```bash
+   docker build -t telegram-media-transfer .
+   ```
+
+2. Push to Docker Hub:
+   ```bash
+   docker tag telegram-media-transfer yourusername/telegram-media-transfer
+   docker push yourusername/telegram-media-transfer
+   ```
+
+3. In Koyeb, create a new app:
+   - Click "Create App"
+   - Choose "Docker" as the deployment method
+   - Enter your Docker image: `yourusername/telegram-media-transfer`
+
+4. Configure environment variables in Koyeb:
+   - `API_ID` - Your Telegram API ID
+   - `API_HASH` - Your Telegram API Hash
+   - `SOURCE_MESSAGE_LINK` - Link to any message in the source channel
+   - `TARGET_CHANNEL` - Target channel ID
+
+5. Deploy the app
+
 ## Important Notes
 
 1. Make sure the bot account:
@@ -46,6 +75,7 @@ Automatically transfers media files from a source channel to a target channel, u
    - Start transferring files automatically
    - Handle rate limits by waiting when needed
    - Continue from where it left off if restarted
+   - Download all media files from oldest to newest
 
 3. Monitor the progress in Koyeb logs
 
@@ -63,4 +93,13 @@ Automatically transfers media files from a source channel to a target channel, u
 3. Source Message Link:
    - Open any message in the source channel
    - Copy the message link
-   - Use this as SOURCE_MESSAGE_LINK 
+   - Use this as SOURCE_MESSAGE_LINK
+
+## Troubleshooting
+
+If you encounter issues with the deployment:
+
+1. Check the Koyeb logs for error messages
+2. Verify that all environment variables are set correctly
+3. Make sure the bot account has the necessary permissions
+4. Try running the script locally first to ensure it works 
