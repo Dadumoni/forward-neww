@@ -1,21 +1,53 @@
 import os
+import sys
 import asyncio
+import logging
 import re
-from telethon import TelegramClient, events
+from telethon import TelegramClient, events, errors
 from telethon.tl.types import MessageMediaPhoto, MessageMediaDocument, Channel
 from telethon.errors import FloodWaitError, ChatAdminRequiredError
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 from dotenv import load_dotenv
 
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 # Load environment variables
 load_dotenv()
 
-# Telegram API credentials
+# Validate environment variables
+required_vars = ['API_ID', 'API_HASH', 'SOURCE_MESSAGE_LINK', 'TARGET_CHANNEL']
+missing_vars = [var for var in required_vars if not os.getenv(var)]
+
+if missing_vars:
+    logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+    logger.error("Please set all required environment variables in Koyeb")
+    sys.exit(1)
+
+# Get environment variables
 API_ID = os.getenv('API_ID')
 API_HASH = os.getenv('API_HASH')
 SOURCE_MESSAGE_LINK = os.getenv('SOURCE_MESSAGE_LINK')
 TARGET_CHANNEL = os.getenv('TARGET_CHANNEL')
+
+# Validate API_ID is a valid integer
+try:
+    API_ID = int(API_ID)
+except ValueError:
+    logger.error(f"API_ID must be a valid integer, got: {API_ID}")
+    sys.exit(1)
+
+# Validate TARGET_CHANNEL is a valid integer
+try:
+    TARGET_CHANNEL = int(TARGET_CHANNEL)
+except ValueError:
+    logger.error(f"TARGET_CHANNEL must be a valid integer, got: {TARGET_CHANNEL}")
+    sys.exit(1)
 
 # Initialize the client
 client = TelegramClient('media_transfer_session', API_ID, API_HASH)

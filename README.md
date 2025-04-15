@@ -28,10 +28,16 @@ Automatically transfers media files from a source channel to a target channel, u
    - Choose the main branch
 
 4. Configure environment variables in Koyeb:
-   - `API_ID` - Your Telegram API ID
-   - `API_HASH` - Your Telegram API Hash
+   - `API_ID` - Your Telegram API ID (must be a number, e.g., "123456")
+   - `API_HASH` - Your Telegram API Hash (32-character string, e.g., "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6")
    - `SOURCE_MESSAGE_LINK` - Link to any message in the source channel (e.g., https://t.me/c/1234567890/1)
-   - `TARGET_CHANNEL` - Target channel ID (e.g., -1001234567890)
+   - `TARGET_CHANNEL` - Target channel ID (must be a number with -100 prefix, e.g., "-1001234567890")
+
+   ⚠️ Important: Make sure to:
+   - Remove any quotes around the values
+   - Use the exact format shown in the examples
+   - For TARGET_CHANNEL, include the -100 prefix
+   - For API_ID, use only numbers
 
 5. Deploy the app:
    - Choose "Docker" as the runtime
